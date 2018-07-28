@@ -45,6 +45,15 @@ class EntryViewController: UITableViewController, UITableViewDataSource, UITable
         return cell
     }
     
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .destructive, title: "Delete") {
+            action, index in
+            self.deleteEntry(at: indexPath)
+        }
+        
+        return [delete]
+    }
+    
     func deleteEntry(at indexPath: IndexPath) {
         guard let entry = trip?.entries?[indexPath.row] else {
             return
@@ -61,16 +70,7 @@ class EntryViewController: UITableViewController, UITableViewDataSource, UITable
             }
         }
     }
-    
-    // Delete or Edit Entry
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .destructive, title: "Delete") {
-            action, index in
-            self.deleteEntry(at: indexPath)
-        }
-        
-        return [delete]
-    }
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let segueIdentifier = segue.identifier else {

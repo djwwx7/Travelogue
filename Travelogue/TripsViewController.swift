@@ -41,6 +41,27 @@ class TripsViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return cell
     }
     
+    func updateDocumentsArray() {
+        trips = category?.trips?.sortedArray(using: [NSSortDescriptor(key: "name", ascending: true)]) as? [Trip] ?? [Trip]()
+    }
+    
+    func deleteDocument(at indexPath: IndexPath) {
+        let trip = tripss[indexPath.row]
+        
+        if let managedObjectContext = document.managedObjectContext {
+            managedObjectContext.delete(document)
+            
+            do {
+                try managedObjectContext.save()
+                self.trips.remove(at: indexPath.row)
+                TripsTableView.deleteRows(at: [indexPath], with: .automatic)
+            } catch {
+                alertNotifyUser(message: "Delete failed.")
+                documentsTableView.reloadData()
+            }
+        }
+    }
+    
 
     /*
     // MARK: - Navigation
